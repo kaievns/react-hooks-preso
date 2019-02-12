@@ -1,0 +1,178 @@
+import { condensed as theme } from 'mdx-deck/themes'
+import okaidia from 'react-syntax-highlighter/styles/prism/okaidia'
+theme.img = { minWidth: '500px', maxWidth: '1000px', maxHeight: '500px', objectFit: 'contain' };
+theme.prism = { style: { ...okaidia, 'pre[class*="language-"]': { ...okaidia['pre[class*="language-"]'], fontSize: '18px' } } };
+export { theme };
+
+import { Button, Vowels, Weather } from './components';
+
+# React Hooks Stuff WIP
+---
+# Ohi, I'm Nikolay
+
+i'm here to help
+
+![](http://static.boxrec.com/thumb/f/f6/NicolayValuev.jpg/275px-NicolayValuev.jpg)
+---
+# The Brave New World
+
+![](https://usercontent1.hubstatic.com/7585390.jpg)
+
+Welcome to the future
+
+---
+# Hooks 101 - useState
+
+```jsx
+import { useState } from 'react';
+
+const Button = () => {
+  const [ count, setState ] = useState(0);
+
+  <button onClick={() => setState(count + 1)}>
+    You have clicked this {count} times
+  </button>
+}
+```
+---
+# Hooks 101 - useState
+
+<Button />
+
+---
+# Hooks 202 - useEffect
+
+```jsx
+import { useState, useEffect } from 'react';
+
+const isVowel = () => {
+  const vowels = 'aeiouy';
+  const [isVowel, setIsVowel] = useState(null);
+
+  const onKeyDown = ({ key }) => {
+    setIsVowel(vowels.include(key));
+  }
+
+  useEffect(() => {
+    addEventListener('keydown', onKeyDown)
+
+    return () => {
+      removeEventListener('keydown', onKeyDown);
+    }
+  }, []);
+
+  return isVowel;
+}
+```
+---
+
+# Hooks 202 - useEffect
+
+```jsx
+const Vowels = () => {
+  const value = isVowel();
+
+  if (value === null) {
+    return <p>havent pressed anything yet</p>;
+  } else {
+    return <p>what you pressed was {value ? '' : 'NOT'} a vowel</p>;
+  }
+}
+```
+---
+# Hooks 202 - useEffect
+
+<Vowels />
+---
+
+# Hooks 203 - API calls
+
+```jsx
+import { useState, useEffect } from 'react';
+
+const currentWeather = () => {
+  const [{ weather, loading }, setWeather] = useState({ weather: null, loading: true });
+  const url = 'https://api.darksky.net/forecast/2dbcddc142dbb47d651d3acc221362ce/33.8688,151.2093';
+
+  useEffect(() => {
+    fetch(url).then(response => response.json())
+      .then(data =>
+      setWeather({
+        wather: parse(data),
+        loading: false
+      }))
+  }, []);
+
+  return { weather, loading }
+}
+```
+---
+
+# Hooks 203 - API calls
+
+```jsx
+import currentWeather from './utils/weather';
+
+const Weather = () => {
+  const { loading, weather } = currentWeather();
+
+  if (loading) return <p>Loading...</p>
+
+  return <p>{weather}</p>
+}
+```
+---
+
+# Hooks 203 - API calls
+
+<Weather />
+
+---
+
+# Hooks 303 - useContext
+
+```jsx
+import { useState, useEffect, useContext } from 'react';
+import ApiProviderContext from './somewhere';
+
+const currentUser = () => {
+  const [user, setCurrentState] = useState(null);
+
+  useEffect(() => {
+    const api = useContext(ApiProviderContext);
+
+    api.get('/current-user').then(user => {
+      setCurrentUser(user);
+    });
+  }, []);
+
+  return user;
+}
+```
+
+---
+# Hooks 303 - useContext
+
+```jsx
+import currentUser from 'features/auth/logic';
+
+const Avatar = () => {
+  const user = currentUser();
+
+  if (!user) return <DefaultAvatar />
+
+  return <img src={user.avatar} />
+}
+```
+---
+
+# Consider yourself dazzled
+
+![](https://www.booktopia.com.au/http_coversbooktopiacomau/big/9780753453049/dazzling-diggers.jpg)
+
+---
+
+
+# The End
+
+![](https://images-na.ssl-images-amazon.com/images/I/712g27dgAmL._SX425_.jpg)

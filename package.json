@@ -1,0 +1,17 @@
+{
+  "name": "hooks-preso",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "mdx-deck slides.mdx"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mdx-deck": "^1.7.7",
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1",
+    "react-syntax-highlighter": "^9.0.0"
+  }
+}
