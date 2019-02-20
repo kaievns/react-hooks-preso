@@ -10,12 +10,12 @@ export const Button = () => {
   )
 }
 
-const isVowel = () => {
-  const vowels = 'aeiouyj';
-  const [isVowel, setIsVowel] = useState(null);
+const isEvenNumber = () => {
+  const [isEven, setIsEven] = useState(null);
 
   const onKeyDown = ({ key }) => {
-    setIsVowel(vowels.includes(key));
+    const number = parseInt(key, 10);
+    setIsEven(isNaN(number) ? null : (number % 2 === 0));
   }
 
   useEffect(() => {
@@ -26,16 +26,15 @@ const isVowel = () => {
     }
   }, []);
 
-  return isVowel;
+  return isEven;
 }
-
-export const Vowels = () => {
-  const value = isVowel();
+export const NumbersChecker = () => {
+  const value = isEvenNumber();
 
   if (value === null) {
-    return <p>havent pressed anything yet</p>;
+    return <p>Not a number</p>;
   } else {
-    return <p>what you pressed was {value ? '' : 'NOT'} a vowel</p>;
+    return <p>what you pressed was {value ? '' : 'NOT'} an even number</p>;
   }
 }
 

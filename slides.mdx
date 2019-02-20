@@ -4,24 +4,34 @@ theme.img = { minWidth: '500px', maxWidth: '1000px', maxHeight: '500px', objectF
 theme.prism = { style: { ...okaidia, 'pre[class*="language-"]': { ...okaidia['pre[class*="language-"]'], fontSize: '18px' } } };
 export { theme };
 
-import { Button, Vowels, Weather } from './components';
+import { Button, NumbersChecker, Weather } from './components';
 
-# React Hooks Stuff WIP
+# React Hooks You
+
+A gentle intro into React hooks and what do they mean for the future of ~~humanity~~ React development
 ---
-# Ohi, I'm Nikolay
+## Ohi, I'm Nikolay
 
-i'm here to help
+![](https://pbs.twimg.com/profile_images/1097982702437904384/4CO3AwDl_400x400.png)
 
-![](http://static.boxrec.com/thumb/f/f6/NicolayValuev.jpg/275px-NicolayValuev.jpg)
+GH://MadRabbit / @nemshilov
+
 ---
-# The Brave New World
+
+![](https://shortlyster.com/wp-content/uploads/2019/01/Shortlyster_logo_small.png)
+
+Yes we're hiring!
+
+
+---
+## The Brave New World
 
 ![](https://usercontent1.hubstatic.com/7585390.jpg)
 
-Welcome to the future
+Welcome to the future!
 
 ---
-# Hooks 101 - useState
+## Hooks 101 - useState
 
 ```jsx
 import { useState } from 'react';
@@ -35,22 +45,22 @@ const Button = () => {
 }
 ```
 ---
-# Hooks 101 - useState
+## Hooks 101 - useState
 
 <Button />
 
 ---
-# Hooks 202 - useEffect
+## Hooks 202 - useEffect
 
 ```jsx
 import { useState, useEffect } from 'react';
 
-const isVowel = () => {
-  const vowels = 'aeiouy';
-  const [isVowel, setIsVowel] = useState(null);
+const isEvenNumber = () => {
+  const [isEven, setIsEven] = useState(null);
 
   const onKeyDown = ({ key }) => {
-    setIsVowel(vowels.include(key));
+    const number = parseInt(key, 10);
+    setIsEven(isNaN(number) ? null : (number % 2 === 0));
   }
 
   useEffect(() => {
@@ -61,38 +71,38 @@ const isVowel = () => {
     }
   }, []);
 
-  return isVowel;
+  return isEven;
 }
 ```
 ---
 
-# Hooks 202 - useEffect
+## Hooks 202 - useEffect
 
 ```jsx
-const Vowels = () => {
-  const value = isVowel();
+const NumbersChecker = () => {
+  const value = isEvenNumber();
 
   if (value === null) {
-    return <p>havent pressed anything yet</p>;
+    return <p>Not a number</p>;
   } else {
-    return <p>what you pressed was {value ? '' : 'NOT'} a vowel</p>;
+    return <p>what you pressed was {value ? '' : 'NOT'} an even number</p>;
   }
 }
 ```
 ---
-# Hooks 202 - useEffect
+## Hooks 202 - useEffect
 
-<Vowels />
+<NumbersChecker />
 ---
 
-# Hooks 203 - API calls
+## Hooks 203 - API calls
 
 ```jsx
 import { useState, useEffect } from 'react';
 
 const currentWeather = () => {
   const [{ weather, loading }, setWeather] = useState({ weather: null, loading: true });
-  const url = 'https://api.darksky.net/forecast/2dbcddc142dbb47d651d3acc221362ce/33.8688,151.2093';
+  const url = 'https://api.darksky.net/forecast/[AUTH_TOKEN]/33.8688,151.2093';
 
   useEffect(() => {
     fetch(url).then(response => response.json())
@@ -108,7 +118,7 @@ const currentWeather = () => {
 ```
 ---
 
-# Hooks 203 - API calls
+## Hooks 203 - API calls
 
 ```jsx
 import currentWeather from './utils/weather';
@@ -123,20 +133,20 @@ const Weather = () => {
 ```
 ---
 
-# Hooks 203 - API calls
+## Hooks 203 - API calls
 
 <Weather />
 
 ---
 
-# Hooks 303 - useContext
+## Hooks 303-useContext
 
 ```jsx
 import { useState, useEffect, useContext } from 'react';
 import ApiProviderContext from './somewhere';
 
 const currentUser = () => {
-  const [user, setCurrentState] = useState(null);
+  const [user, setCurrentUser] = useState(null);
 
   useEffect(() => {
     const api = useContext(ApiProviderContext);
@@ -151,10 +161,10 @@ const currentUser = () => {
 ```
 
 ---
-# Hooks 303 - useContext
+## Hooks 303-useContext
 
 ```jsx
-import currentUser from 'features/auth/logic';
+import currentUser from 'auth/logic';
 
 const Avatar = () => {
   const user = currentUser();
@@ -166,12 +176,246 @@ const Avatar = () => {
 ```
 ---
 
-# Consider yourself dazzled
-
-![](https://www.booktopia.com.au/http_coversbooktopiacomau/big/9780753453049/dazzling-diggers.jpg)
+# Why Does This Matter?
 
 ---
 
+## Remember This?
+
+```jsx
+import { Query, Mutation } from 'react-apollo';
+
+const EditPage = () =>
+  <Query query={FetchDataQuery}>
+    {({ data, error, loading }) => (
+      <Mutation mutation={UpdateDataMutation} invalidateQueries={...}>
+        {(update) => {
+          const currentData = data.something;
+          const updateData = variables => update({ variables });
+
+          return (
+            <SomeForm 
+              onSubmit={updateData}
+              defaultValue={currentData}
+            />
+          );
+        }}
+      </Mutation>
+    )}
+  </Query>
+```
+---
+
+## It Could be This
+
+```jsx
+import { useQuery, useMutation } from 'react-apollo-hooks';
+
+const EditPage = () => {
+  const { data, error, loading } = useQuery(FetchDataQuery);
+  const update = useMutation(UpdateDataMutation, { invalidateQueries: ... });
+
+  const currentData = data.something;
+  const updateData = variables => update({ variables });
+
+  return (
+    <SomeForm 
+      onSubmit={updateData}
+      defaultValue={currentData}
+    />
+  );
+}
+```
+---
+
+## And Then Even This
+
+```jsx
+import { useData, updateData } from './logic';
+
+const EditPage = () => {
+  const [currentData] = useData();
+
+  return {
+    <SomeForm
+      onSubmit={updateData}
+      defaultValue={currentData}
+    />
+  );
+}
+```
+---
+
+## And Maybe This...
+
+```jsx
+import { fetchData, updateData } from './logic';
+
+const EditPage = () => 
+  <SomeForm
+    onSubmit={updateData}
+    defaultValue={fetchData()}
+  />;
+```
+---
+
+# React Is Changing
+
+```
+                   .------------.      .------------.
+                   |            |      |     UI     |
+                   |     UI     |      `------------`
+                   |     +      | ->          +
+                   |    STATE   |      .------------.
+                   |            |      |    STATE   |
+                   `------------`      `------------`
+
+```
+MVVM -> MV(Something)
+---
+
+![](https://memegenerator.net/img/instances/52343119.jpg)
+
+---
+# What Does It Give Us?
+
+---
+
+## Separation of concerns
+
+* Less complexity in UI allow to build bigger
+* UI frontenders can be friends with JS frontenders
+
+---
+## Easier Testing
+
+```jsx
+import * as logic from './logic';
+
+sinon.stub(logic, 'currentUser').return(null);
+expect(mount(<Avatar />).find('img')).to.include.props({ src: 'default.jpg' });
+
+sinon.stub(logic', currentUser').return({ avatar: 'my-face.jpg' });
+expect(mount(<Avatar />).find('img')).to.include.props({ src: 'my-face.jpg' });
+```
+---
+
+## Sensible TypeScript Support
+
+```jsx
+interface User {
+  name: string;
+  avatar: string;
+}
+
+const [user, setUser] = useState<User>(null);
+
+user // <- type of User
+setUser // <- type of (user: User) => void
+```
+
+finally!
+---
+
+## The Death Of Containers?...
+
+When data and logic live outside of UI,
+
+do we need HOCs and containers anymore?
+
+---
+# Bonus Round
+
+What About Suspense?
+
+---
+
+## How Does It Work?
+
+```jsx
+const Suspense = ({ fallback, children }) => {
+  try {
+    return <>{children}<>;
+  } catch (error) {
+    if (error instanceof Promise) { // <- the magic
+      return fallback;
+    }
+    throw error;
+  }
+}
+```
+---
+
+## Throw a promise
+
+```jsx
+class AsyncComponent extends React.Component {
+  state = { loading: false, data: null };
+
+  fetchData() {
+    if (!this.state.loading) {
+      const promise = fetch(url).then(data => 
+        this.setState({ data, loading: false })
+      );
+      throw promise; // <- the maddness
+    } 
+  }
+
+  render() {
+    this.fetchData();
+
+    return <div>{this.state.data}</div>
+  }
+}
+```
+---
+
+## Tie It Together
+
+```jsx
+const Page = () =>
+  <Suspense fallback={<div>Loading...</div>}>
+    <AsyncComponent />
+  </Suspense>;
+```
+---
+
+## The Same Thing With Hooks
+
+```jsx
+const Page = () => {
+  const { data, loading } = useData();
+
+  if (loading) return <div>Loading...</div>;
+
+  return <div>{data}</div>
+}
+```
+---
+
+## Suspsense vs. Hooks
+
+more like
+
+## Suspsense _and_ Hooks
+
+---
+
+## Suspsense is for
+
+* Handling Loading State UI
+* Grossly Abuses JavaScript
+
+## Hooks are for
+
+* Side-effects management
+* Makes JavaScript great again
+
+---
+
+![](https://images.customplanet.com/UserCreatedImages/MainDisplayImages/Front/0af635ae-a7b7-4c15-ab21-f3b4e5050937.png)
+
+---
 
 # The End
 
